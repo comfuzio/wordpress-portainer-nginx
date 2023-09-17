@@ -1,0 +1,33 @@
+version: '3.3'
+
+services:
+  app:
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+
+  goaccess:
+    image: 'xavierh/goaccess-for-nginxproxymanager:latest'
+    container_name: goaccess
+    restart: always
+    ports:
+      - '7880:7880'
+    environment:
+      - PUID=0 # Set to the User ID with read access to the log files (e.g., 0 for root)
+      - PGID=0 # Set to the Group ID with read access to the log files (e.g., 0 for root)
+      - TZ=Europe/Athens
+      - SKIP_ARCHIVED_LOGS=False # optional
+      - DEBUG=False # optional
+      - BASIC_AUTH=False # optional
+      - BASIC_AUTH_USERNAME=user # optional
+      - BASIC_AUTH_PASSWORD=pass # optional
+      - EXCLUDE_IPS=127.0.0.1 # optional - comma delimited
+      - LOG_TYPE=NPM # optional - more information below
+    volumes:
+      - ./data/logs:/opt/log
