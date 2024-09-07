@@ -1,8 +1,6 @@
-version: '3'
-
 services:
   db:
-    image: mariadb:11.1.2-jammy
+    image: mariadb:11.5.2-noble
     command: '--default-authentication-plugin=mysql_native_password'
     volumes:
       - db_data:/var/lib/mysql
